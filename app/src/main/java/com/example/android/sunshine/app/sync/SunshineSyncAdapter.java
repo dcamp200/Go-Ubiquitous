@@ -36,6 +36,7 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
+import com.example.android.sunshine.app.wearable.TodayWearableIntentService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -368,6 +369,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 updateWidgets();
                 updateMuzei();
+                updateWearable();
                 notifyWeather();
             }
             Log.d(LOG_TAG, "Sync Complete. " + cVVector.size() + " Inserted");
@@ -397,6 +399,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     .setClass(context, WeatherMuzeiSource.class));
         }
     }
+
+    private void updateWearable() {
+        Log.d(LOG_TAG, "Updating wearable with weather updates...");
+        Context context = getContext();
+        context.startService(new Intent(ACTION_DATA_UPDATED)
+                    .setClass(context, TodayWearableIntentService.class));
+    }
+
+
+
 
     private void notifyWeather() {
         Context context = getContext();

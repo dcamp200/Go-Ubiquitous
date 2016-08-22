@@ -17,6 +17,7 @@ package com.example.android.sunshine.app;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -47,6 +48,7 @@ import android.widget.TextView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
+import com.example.android.sunshine.app.wearable.TodayWearableIntentService;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link android.support.v7.widget.RecyclerView} layout.
@@ -59,6 +61,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mChoiceMode;
     private boolean mHoldForTransition;
     private long mInitialSelectedDate = -1;
+    public static final String ACTION_DATA_UPDATED =
+            "com.example.android.sunshine.app.ACTION_DATA_UPDATED";
 
     private static final String SELECTED_KEY = "selected_position";
 
@@ -248,8 +252,20 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
 
+        // Send the weather forecast to the wearable
+        updateWearable();
         return rootView;
     }
+
+    private void updateWearable() {
+        Log.d(LOG_TAG, "Sending weather updates to wearable...");
+
+        Context context = getContext();
+        context.startService(new Intent(ACTION_DATA_UPDATED)
+                .setClass(context, TodayWearableIntentService.class));
+    }
+
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

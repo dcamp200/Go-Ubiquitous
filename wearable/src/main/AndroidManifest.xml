@@ -17,6 +17,7 @@
             android:name=".SunshineWatchFaceService"
             android:label="@string/my_digital_name"
             android:permission="android.permission.BIND_WALLPAPER">
+
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face" />

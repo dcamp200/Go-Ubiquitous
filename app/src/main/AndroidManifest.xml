@@ -134,6 +134,18 @@
                 android:name="color"
                 android:value="@color/primary" />
         </service>
+
+        <!-- Wearable Extension -->
+        <service
+            android:name=".wearable.TodayWearableIntentService"
+            android:description="@string/wearable_description"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.example.android.sunshine.app.ACTION_DATA_UPDATED" />
+            </intent-filter>
+
+        </service>
+
         <!-- Today Widget -->
         <receiver
             android:name=".widget.TodayWidgetProvider"
