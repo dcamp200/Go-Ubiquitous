@@ -320,24 +320,30 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
         public void onDraw(Canvas canvas, Rect bounds) {
             int width = bounds.width();
             int height = bounds.height();
+            int startYPos = (height-280)/2;
+            int startXPos = (width-280)/2;
+
+
+
+            //Log.d(TAG, "Height=" + mYOffset);
 
             // Draw the background.
             if (isInAmbientMode()) {
                 canvas.drawColor(Color.BLACK);
             } else {
                 canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
-                canvas.drawLine(mXOffsetLineStart, mYOffsetLineStart, mXOffsetLineStop, mYOffsetLineStop, mLinePaint);
+                canvas.drawLine(startXPos+40, startYPos+180, startXPos+240, startYPos+180, mLinePaint);
 
                 if (mWeatherIcon!=null) {
-                    canvas.drawBitmap(mWeatherIcon, width/5*1.1f, height/5*3.3f,null);
+                    canvas.drawBitmap(mWeatherIcon, startXPos+10, startYPos+200,null);
                 } else {
                     Drawable drawable = mResources.getDrawable(R.drawable.ic_clear, null);
                     mWeatherIcon = ((BitmapDrawable) drawable).getBitmap();
                 }
 
 
-                canvas.drawText("High", width/5*2.0f, height/5*4, mDateTextPaint);
-                canvas.drawText("Low",  width/5*2.9f, height/5*4,  mDateTextPaint);
+                canvas.drawText("High", startXPos+90, startYPos+260, mDateTextPaint);
+                canvas.drawText("Low",  startXPos+190, startYPos+260, mDateTextPaint);
             }
 
             // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
@@ -346,12 +352,18 @@ public class SunshineWatchFaceService extends CanvasWatchFaceService {
             String dateText = mDateformat.format(mCalendar.getTime());
 
             String text = String.format("%d:%02d", mTime.hour, mTime.minute);
-            canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
 
-            canvas.drawText(dateText, mXOffset, mYOffset2, mDateTextPaint);
 
-            canvas.drawText(mHighTemp, width/5*2.1f, height/5*3.6f, mDateTextPaint);
-            canvas.drawText(mLowTemp,  width/5*3.0f, height/5*3.6f,  mDateTextPaint);
+            if(startXPos>0) {
+                canvas.drawText(text, startXPos + 10, startYPos + 100, mTextPaint);
+            } else {
+                canvas.drawText(text, (width-160)/2, startYPos + 100, mTextPaint);
+            }
+
+            canvas.drawText(dateText, startXPos+20, startYPos+160, mDateTextPaint);
+
+            canvas.drawText(mHighTemp, startXPos+100, startYPos+220, mDateTextPaint);
+            canvas.drawText(mLowTemp,  startXPos+200, startYPos+220,  mDateTextPaint);
 
 
         }
